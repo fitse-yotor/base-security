@@ -3,7 +3,15 @@ import { Menu, X, Briefcase, BookOpen, Award, Image } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { BaseLogo } from '../components/BaseLogo';
 import { WhatsAppButton } from '../components/WhatsAppButton';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+
+function ScrollToTop() {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+  }, [pathname]);
+  return null;
+}
 
 export default function Root() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -11,11 +19,17 @@ export default function Root() {
   const isAdminRoute = location.pathname.startsWith('/admin');
 
   if (isAdminRoute) {
-    return <Outlet />;
+    return (
+      <>
+        <ScrollToTop />
+        <Outlet />
+      </>
+    );
   }
 
   return (
     <div className="min-h-screen flex flex-col">
+      <ScrollToTop />
       {/* Header */}
       <header className="bg-secondary text-white sticky top-0 z-50 shadow-lg">
         <div className="container mx-auto px-4">

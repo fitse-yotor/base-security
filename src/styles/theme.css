@@ -216,3 +216,10 @@
     line-height: 1.5;
   }
 }
+
+/* ── Print styles for invoice ────────────────────────────────────── */
+@media print {
+  header, footer, nav, .print\:hidden { display: none !important; }
+  body { background: white !important; }
+  @page { margin: 1cm; }
+}

@@ -1,7 +1,8 @@
 import { Outlet, Link, useLocation } from 'react-router';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Briefcase, BookOpen, Award, Image } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { BaseLogo } from '../components/BaseLogo';
+import { WhatsAppButton } from '../components/WhatsAppButton';
 import { useState } from 'react';
 
 export default function Root() {
@@ -71,6 +72,32 @@ export default function Root() {
               <Link to="/about" className="hover:text-primary transition-colors">
                 About Us
               </Link>
+              <Link to="/gallery" className="hover:text-primary transition-colors">
+                Gallery
+              </Link>
+              <div className="relative group">
+                <button className="hover:text-primary transition-colors">More</button>
+                <div className="absolute top-full right-0 mt-2 bg-white text-foreground rounded-lg shadow-xl p-4 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all min-w-[200px] z-50">
+                  <Link to="/blog" className="flex items-center gap-2 px-4 py-2 hover:bg-primary/10 hover:text-primary rounded-md transition-colors text-sm">
+                    <BookOpen className="w-4 h-4" /> Blog & News
+                  </Link>
+                  <Link to="/faq" className="flex items-center gap-2 px-4 py-2 hover:bg-primary/10 hover:text-primary rounded-md transition-colors text-sm">
+                    <Award className="w-4 h-4" /> FAQ
+                  </Link>
+                  <Link to="/certifications" className="flex items-center gap-2 px-4 py-2 hover:bg-primary/10 hover:text-primary rounded-md transition-colors text-sm">
+                    <Award className="w-4 h-4" /> Certifications
+                  </Link>
+                  <Link to="/careers" className="flex items-center gap-2 px-4 py-2 hover:bg-primary/10 hover:text-primary rounded-md transition-colors text-sm">
+                    <Briefcase className="w-4 h-4" /> Careers
+                  </Link>
+                  <Link to="/track-request" className="flex items-center gap-2 px-4 py-2 hover:bg-primary/10 hover:text-primary rounded-md transition-colors text-sm">
+                    <Image className="w-4 h-4" /> Track Request
+                  </Link>
+                  <Link to="/client-portal" className="flex items-center gap-2 px-4 py-2 hover:bg-primary/10 hover:text-primary rounded-md transition-colors text-sm">
+                    <Image className="w-4 h-4" /> Client Portal
+                  </Link>
+                </div>
+              </div>
               <Link to="/contact" className="hover:text-primary transition-colors">
                 Contact
               </Link>
@@ -121,6 +148,27 @@ export default function Root() {
                 <Link to="/about" className="hover:text-primary transition-colors" onClick={() => setMobileMenuOpen(false)}>
                   About Us
                 </Link>
+                <Link to="/gallery" className="hover:text-primary transition-colors" onClick={() => setMobileMenuOpen(false)}>
+                  Gallery
+                </Link>
+                <Link to="/blog" className="hover:text-primary transition-colors" onClick={() => setMobileMenuOpen(false)}>
+                  Blog & News
+                </Link>
+                <Link to="/faq" className="hover:text-primary transition-colors" onClick={() => setMobileMenuOpen(false)}>
+                  FAQ
+                </Link>
+                <Link to="/certifications" className="hover:text-primary transition-colors" onClick={() => setMobileMenuOpen(false)}>
+                  Certifications
+                </Link>
+                <Link to="/careers" className="hover:text-primary transition-colors" onClick={() => setMobileMenuOpen(false)}>
+                  Careers
+                </Link>
+                <Link to="/track-request" className="hover:text-primary transition-colors" onClick={() => setMobileMenuOpen(false)}>
+                  Track Request
+                </Link>
+                <Link to="/client-portal" className="hover:text-primary transition-colors" onClick={() => setMobileMenuOpen(false)}>
+                  Client Portal
+                </Link>
                 <Link to="/contact" className="hover:text-primary transition-colors" onClick={() => setMobileMenuOpen(false)}>
                   Contact
                 </Link>
@@ -142,6 +190,9 @@ export default function Root() {
       <main className="flex-1">
         <Outlet />
       </main>
+
+      {/* WhatsApp Floating Button */}
+      <WhatsAppButton />
 
       {/* Footer */}
       <footer className="bg-secondary text-white py-12">
@@ -165,8 +216,13 @@ export default function Root() {
               <div className="flex flex-col gap-2 text-sm">
                 <Link to="/" className="hover:text-primary transition-colors">Home</Link>
                 <Link to="/about" className="hover:text-primary transition-colors">About Us</Link>
-                <Link to="/training" className="hover:text-primary transition-colors">Training</Link>
-                <Link to="/contact" className="hover:text-primary transition-colors">Contact</Link>
+                <Link to="/gallery" className="hover:text-primary transition-colors">Gallery</Link>
+                <Link to="/blog" className="hover:text-primary transition-colors">Blog & News</Link>
+                <Link to="/faq" className="hover:text-primary transition-colors">FAQ</Link>
+                <Link to="/certifications" className="hover:text-primary transition-colors">Certifications</Link>
+                <Link to="/careers" className="hover:text-primary transition-colors">Careers</Link>
+                <Link to="/track-request" className="hover:text-primary transition-colors">Track Request</Link>
+                <Link to="/client-portal" className="hover:text-primary transition-colors">Client Portal</Link>
               </div>
             </div>
             <div>

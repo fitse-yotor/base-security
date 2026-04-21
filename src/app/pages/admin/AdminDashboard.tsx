@@ -36,6 +36,7 @@ export default function AdminDashboard() {
     { name: 'Training', href: '/admin/training', icon: GraduationCap },
     { name: 'Attendance', href: '/admin/attendance', icon: ClipboardCheck },
     { name: 'Payroll', href: '/admin/payroll', icon: FileText },
+    { name: 'Invoices', href: '/admin/invoices', icon: FileText },
     { name: 'Feedback', href: '/admin/feedback', icon: Star },
     { name: 'Reports', href: '/admin/reports', icon: BarChart3 },
   ];

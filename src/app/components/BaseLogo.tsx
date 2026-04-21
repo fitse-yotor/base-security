@@ -107,7 +107,7 @@ export function BaseLogo({ className = 'w-12 h-12' }: { className?: string }) {
         src="/logo.png"
         alt="BASE Security, Cleaning & Trading PLC"
         className={className}
-        style={{ objectFit: 'contain' }}
+        style={{ objectFit: 'contain', borderRadius: '8px' }}
         onError={() => setImgError(true)}
       />
     );

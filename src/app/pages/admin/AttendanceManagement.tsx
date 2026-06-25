@@ -7,7 +7,8 @@ import { Label } from '../../components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../components/ui/select';
 import { Plus, Search, CheckCircle, XCircle, Clock, Calendar } from 'lucide-react';
 import { useAppStore } from '../../lib/store';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../../components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '../../components/ui/dialog';
+
 import { toast } from 'sonner';
 
 export default function AttendanceManagement() {
@@ -283,6 +284,7 @@ export default function AttendanceManagement() {
         <DialogContent className="max-w-lg">
           <DialogHeader>
             <DialogTitle>Record Attendance</DialogTitle>
+            <DialogDescription>Record attendance for a selected guard</DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
             <div className="space-y-2">

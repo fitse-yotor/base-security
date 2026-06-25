@@ -20,7 +20,7 @@ export default function PayrollManagement() {
       g.employeeId.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const totalPayroll = guards.reduce((sum, g) => sum + (g.monthlySalary || 0), 0);
+  const totalPayroll = guards.reduce((sum, g) => sum + (Number(g.monthlySalary) || 0), 0);
   const avgSalary = guards.length > 0 ? totalPayroll / guards.length : 0;
   const highestPaid = guards.reduce((max, g) => ((g.monthlySalary || 0) > (max.monthlySalary || 0) ? g : max), guards[0]);
 
@@ -62,9 +62,9 @@ export default function PayrollManagement() {
               <div className="bg-primary/10 p-3 rounded-lg">
                 <DollarSign className="w-6 h-6 text-primary" />
               </div>
-              <div>
+              <div className="flex-1">
                 <div className="text-sm text-muted-foreground">Total Monthly Payroll</div>
-                <div className="text-2xl font-semibold text-primary">{formatETB(totalPayroll)}</div>
+                <div className="text-2xl font-semibold text-primary truncate">{formatETB(totalPayroll)}</div>
               </div>
             </div>
           </CardContent>

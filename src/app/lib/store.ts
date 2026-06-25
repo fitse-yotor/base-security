@@ -129,550 +129,490 @@ export interface Notification {
 interface AppStore {
   // Service Requests
   serviceRequests: ServiceRequest[];
-  addServiceRequest: (request: Omit<ServiceRequest, 'id' | 'submittedAt'>) => void;
-  updateServiceRequestStatus: (id: string, status: ServiceRequest['status']) => void;
-  convertRequestToClient: (requestId: string) => void;
+  addServiceRequest: (request: Omit<ServiceRequest, 'id' | 'submittedAt'>) => Promise<void>;
+  updateServiceRequestStatus: (id: string, status: ServiceRequest['status']) => Promise<void>;
+  convertRequestToClient: (requestId: string) => Promise<void>;
 
   // Clients
   clients: Client[];
-  addClient: (client: Omit<Client, 'id'>) => void;
-  updateClient: (id: string, updates: Partial<Client>) => void;
-  addClientNote: (clientId: string, text: string) => void;
-  addClientFeedback: (clientId: string, feedback: Omit<ClientFeedback, 'id' | 'submittedAt'>) => void;
+  addClient: (client: Omit<Client, 'id'>) => Promise<void>;
+  updateClient: (id: string, updates: Partial<Client>) => Promise<void>;
+  addClientNote: (clientId: string, text: string) => Promise<void>;
+  addClientFeedback: (clientId: string, feedback: Omit<ClientFeedback, 'id' | 'submittedAt'>) => Promise<void>;
 
   // Guards
   guards: Guard[];
-  addGuard: (guard: Omit<Guard, 'id'>) => void;
-  updateGuard: (id: string, updates: Partial<Guard>) => void;
+  addGuard: (guard: Omit<Guard, 'id'>) => Promise<void>;
+  updateGuard: (id: string, updates: Partial<Guard>) => Promise<void>;
 
   // Attendance
   attendance: AttendanceRecord[];
-  addAttendance: (record: Omit<AttendanceRecord, 'id'>) => void;
-  updateAttendance: (id: string, updates: Partial<AttendanceRecord>) => void;
+  addAttendance: (record: Omit<AttendanceRecord, 'id'>) => Promise<void>;
+  updateAttendance: (id: string, updates: Partial<AttendanceRecord>) => Promise<void>;
 
   // Leave Requests
   leaveRequests: LeaveRequest[];
-  addLeaveRequest: (request: Omit<LeaveRequest, 'id' | 'submittedAt'>) => void;
-  updateLeaveRequest: (id: string, status: LeaveRequest['status']) => void;
+  addLeaveRequest: (request: Omit<LeaveRequest, 'id' | 'submittedAt'>) => Promise<void>;
+  updateLeaveRequest: (id: string, status: LeaveRequest['status']) => Promise<void>;
 
   // Deployments
   deployments: Deployment[];
-  addDeployment: (deployment: Omit<Deployment, 'id'>) => void;
-  updateDeployment: (id: string, updates: Partial<Deployment>) => void;
+  addDeployment: (deployment: Omit<Deployment, 'id'>) => Promise<void>;
+  updateDeployment: (id: string, updates: Partial<Deployment>) => Promise<void>;
 
   // Training Programs
   trainingPrograms: TrainingProgram[];
-  addTrainingProgram: (program: Omit<TrainingProgram, 'id'>) => void;
+  addTrainingProgram: (program: Omit<TrainingProgram, 'id'>) => Promise<void>;
 
   // Trainees
   trainees: Trainee[];
-  addTrainee: (trainee: Omit<Trainee, 'id'>) => void;
-  updateTraineeProgress: (id: string, progress: number) => void;
+  addTrainee: (trainee: Omit<Trainee, 'id'>) => Promise<void>;
+  updateTraineeProgress: (id: string, progress: number) => Promise<void>;
 
   // Notifications
   notifications: Notification[];
-  markNotificationRead: (id: string) => void;
-  markAllNotificationsRead: () => void;
-  addNotification: (notification: Omit<Notification, 'id' | 'createdAt'>) => void;
+  markNotificationRead: (id: string) => Promise<void>;
+  markAllNotificationsRead: () => Promise<void>;
+  addNotification: (notification: Omit<Notification, 'id' | 'createdAt'>) => Promise<void>;
+
+  fetchAppData: () => Promise<void>;
 }
 
-// Mock data
-const mockServiceRequests: ServiceRequest[] = [
-  {
-    id: '1',
-    name: 'Abebe Girma',
-    phone: '+251 91 234 5678',
-    email: 'abebe.girma@company.com',
-    serviceType: 'Office & Building Security',
-    location: 'Bole, Addis Abeba',
-    numberOfGuards: 3,
-    duration: '6 months',
-    specialRequirements: 'Need guards with experience in corporate environments',
-    status: 'pending',
-    submittedAt: new Date('2026-04-20'),
-  },
-  {
-    id: '2',
-    name: 'Tigist Haile',
-    phone: '+251 91 345 6789',
-    email: 'tigist.h@vipevents.com',
-    serviceType: 'Private Security (VIP)',
-    location: 'Sheraton Addis, Addis Abeba',
-    numberOfGuards: 5,
-    duration: '2 weeks',
-    specialRequirements: 'VIP protection for international delegation',
-    status: 'approved',
-    submittedAt: new Date('2026-04-18'),
-  },
-];
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
-const mockClients: Client[] = [
-  {
-    id: 'c1',
-    name: 'Dawit Bekele',
-    email: 'security@ethiotelecom.com',
-    phone: '+251 91 456 7890',
-    company: 'Ethio Telecom',
-    serviceType: 'Office & Building Security',
-    location: 'Churchill Avenue, Addis Abeba',
-    contractStart: new Date('2026-01-15'),
-    contractEnd: new Date('2026-07-15'),
-    monthlyRate: 45000,
-    status: 'active',
-    assignedGuards: ['g1', 'g2'],
-    lastContactDate: new Date('2026-04-10'),
-    nextFollowUp: new Date('2026-05-10'),
-    notes: [
-      { id: 'n1', text: 'Client requested additional guard for night shift', createdAt: new Date('2026-04-10') },
-    ],
-    feedback: [
-      { id: 'f1', rating: 5, comment: 'Excellent service, very professional guards.', submittedAt: new Date('2026-03-15') },
-    ],
-  },
-  {
-    id: 'c2',
-    name: 'Meron Tadesse',
-    email: 'operations@hiltonaddis.com',
-    phone: '+251 91 567 8901',
-    company: 'Hilton Addis Abeba',
-    serviceType: 'Private Security (VIP)',
-    location: 'Menelik II Ave, Addis Abeba',
-    contractStart: new Date('2026-02-01'),
-    contractEnd: new Date('2026-08-01'),
-    monthlyRate: 85000,
-    status: 'active',
-    assignedGuards: ['g3', 'g4', 'g5'],
-    lastContactDate: new Date('2026-04-15'),
-    nextFollowUp: new Date('2026-05-15'),
-    notes: [],
-    feedback: [
-      { id: 'f2', rating: 4, comment: 'Good service overall, response time could be improved.', submittedAt: new Date('2026-04-01') },
-    ],
-  },
-];
+function toCamel(s: string): string {
+  return s.replace(/([-_][a-z])/g, ($1) => $1.toUpperCase().replace('-', '').replace('_', ''));
+}
 
-const mockGuards: Guard[] = [
-  {
-    id: 'g1',
-    name: 'Yonas Tesfaye',
-    employeeId: 'BASE-001',
-    phone: '+251 91 111 2222',
-    email: 'yonas.t@basesecurity.com',
-    trainingLevel: 'Advanced',
-    experience: '8 years',
-    availability: 'deployed',
-    certifications: ['CPR', 'First Aid', 'Security Management'],
-    assignedTo: 'c1',
-    monthlySalary: 8500,
-    performanceRating: 4.5,
-    leaveBalance: 12,
-  },
-  {
-    id: 'g2',
-    name: 'Hiwot Alemu',
-    employeeId: 'BASE-002',
-    phone: '+251 91 222 3333',
-    email: 'hiwot.a@basesecurity.com',
-    trainingLevel: 'Advanced',
-    experience: '6 years',
-    availability: 'deployed',
-    certifications: ['CPR', 'First Aid', 'Access Control'],
-    assignedTo: 'c1',
-    monthlySalary: 7500,
-    performanceRating: 4.2,
-    leaveBalance: 10,
-  },
-  {
-    id: 'g3',
-    name: 'Biruk Mengistu',
-    employeeId: 'BASE-003',
-    phone: '+251 91 333 4444',
-    email: 'biruk.m@basesecurity.com',
-    trainingLevel: 'Expert',
-    experience: '12 years',
-    availability: 'deployed',
-    certifications: ['VIP Protection', 'CPR', 'First Aid', 'Crisis Management'],
-    assignedTo: 'c2',
-    monthlySalary: 12000,
-    performanceRating: 4.8,
-    leaveBalance: 15,
-  },
-  {
-    id: 'g4',
-    name: 'Selam Worku',
-    employeeId: 'BASE-004',
-    phone: '+251 91 444 5555',
-    email: 'selam.w@basesecurity.com',
-    trainingLevel: 'Intermediate',
-    experience: '4 years',
-    availability: 'available',
-    certifications: ['CPR', 'First Aid'],
-    monthlySalary: 6000,
-    performanceRating: 3.9,
-    leaveBalance: 8,
-  },
-  {
-    id: 'g5',
-    name: 'Robel Hailu',
-    employeeId: 'BASE-005',
-    phone: '+251 91 555 6666',
-    email: 'robel.h@basesecurity.com',
-    trainingLevel: 'Advanced',
-    experience: '7 years',
-    availability: 'deployed',
-    certifications: ['CPR', 'First Aid', 'Security Systems'],
-    assignedTo: 'c2',
-    monthlySalary: 9000,
-    performanceRating: 4.3,
-    leaveBalance: 11,
-  },
-];
+function toSnake(s: string): string {
+  return s.replace(/[A-Z]/g, (letter) => `_${letter.toLowerCase()}`);
+}
 
-const mockDeployments: Deployment[] = [
-  {
-    id: 'd1',
-    guardId: 'g1',
-    clientId: 'c1',
-    location: 'Churchill Avenue, Addis Abeba',
-    shift: 'day',
-    startDate: new Date('2026-04-15'),
-    endDate: new Date('2026-05-15'),
-    status: 'active',
-    performanceRating: 4.5,
-  },
-  {
-    id: 'd2',
-    guardId: 'g2',
-    clientId: 'c1',
-    location: 'Churchill Avenue, Addis Abeba',
-    shift: 'night',
-    startDate: new Date('2026-04-15'),
-    endDate: new Date('2026-05-15'),
-    status: 'active',
-  },
-];
+export function keysToCamel(obj: any): any {
+  if (Array.isArray(obj)) {
+    return obj.map((v) => keysToCamel(v));
+  } else if (obj !== null && obj !== undefined && obj.constructor === Object) {
+    return Object.keys(obj).reduce(
+      (result, key) => ({
+        ...result,
+        [toCamel(key)]: keysToCamel(obj[key]),
+      }),
+      {}
+    );
+  }
+  return obj;
+}
 
-const mockTrainingPrograms: TrainingProgram[] = [
-  {
-    id: 't1',
-    name: 'Basic Security Guard Training',
-    duration: '2 weeks',
-    requirements: ['High school diploma', 'Background check'],
-    description: 'Comprehensive training covering basic security principles, observation, reporting, and emergency response.',
-    nextStartDate: new Date('2026-05-01'),
-    enrolledTrainees: ['tr1', 'tr2'],
-  },
-  {
-    id: 't2',
-    name: 'VIP Protection Specialist',
-    duration: '4 weeks',
-    requirements: ['2+ years security experience', 'Basic training certificate'],
-    description: 'Advanced training in executive protection, threat assessment, and personal security.',
-    nextStartDate: new Date('2026-05-15'),
-    enrolledTrainees: ['tr3'],
-  },
-];
+export function keysToSnake(obj: any): any {
+  if (Array.isArray(obj)) {
+    return obj.map((v) => keysToSnake(v));
+  } else if (obj !== null && obj !== undefined && obj.constructor === Object) {
+    return Object.keys(obj).reduce(
+      (result, key) => ({
+        ...result,
+        [toSnake(key)]: keysToSnake(obj[key]),
+      }),
+      {}
+    );
+  }
+  return obj;
+}
 
-const mockTrainees: Trainee[] = [
-  {
-    id: 'tr1',
-    name: 'Kaleb Desta',
-    email: 'kaleb.d@email.com',
-    phone: '+251 91 777 8888',
-    programId: 't1',
-    progress: 45,
-    status: 'in-progress',
-    enrolledDate: new Date('2026-04-01'),
-  },
-  {
-    id: 'tr2',
-    name: 'Liya Bekele',
-    email: 'liya.b@email.com',
-    phone: '+251 91 888 9999',
-    programId: 't1',
-    progress: 60,
-    status: 'in-progress',
-    enrolledDate: new Date('2026-04-01'),
-  },
-  {
-    id: 'tr3',
-    name: 'Natnael Girma',
-    email: 'natnael.g@email.com',
-    phone: '+251 91 999 0000',
-    programId: 't2',
-    progress: 25,
-    status: 'in-progress',
-    enrolledDate: new Date('2026-04-10'),
-  },
-];
+async function fetchJson(path: string, options?: RequestInit) {
+  const res = await fetch(`${API_URL}${path}`, {
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      ...options?.headers,
+    },
+  });
+  if (!res.ok) {
+    throw new Error(`HTTP error! status: ${res.status}`);
+  }
+  if (res.status === 204) return null;
+  return res.json();
+}
 
-const mockAttendance: AttendanceRecord[] = [
-  { id: 'a1', guardId: 'g1', date: new Date('2026-04-21'), checkIn: '06:50', checkOut: '19:05', status: 'present' },
-  { id: 'a2', guardId: 'g2', date: new Date('2026-04-21'), checkIn: '18:55', checkOut: undefined, status: 'present' },
-  { id: 'a3', guardId: 'g3', date: new Date('2026-04-21'), checkIn: '07:15', checkOut: '19:10', status: 'late', notes: 'Traffic delay' },
-  { id: 'a4', guardId: 'g4', date: new Date('2026-04-21'), status: 'absent' },
-  { id: 'a5', guardId: 'g5', date: new Date('2026-04-21'), checkIn: '18:50', checkOut: undefined, status: 'present' },
-];
-
-const mockLeaveRequests: LeaveRequest[] = [
-  {
-    id: 'l1',
-    guardId: 'g4',
-    startDate: new Date('2026-04-22'),
-    endDate: new Date('2026-04-24'),
-    reason: 'Family emergency',
-    status: 'pending',
-    submittedAt: new Date('2026-04-21'),
-  },
-];
-
-const mockNotifications: Notification[] = [
-  {
-    id: 'notif1',
-    type: 'pending_request',
-    title: 'New Service Request',
-    message: 'Abebe Girma submitted a new service request for Office Security.',
-    read: false,
-    createdAt: new Date('2026-04-20'),
-    linkTo: '/admin',
-  },
-  {
-    id: 'notif2',
-    type: 'contract_expiry',
-    title: 'Contract Expiring Soon',
-    message: 'Ethio Telecom contract expires on July 15, 2026. Consider renewal.',
-    read: false,
-    createdAt: new Date('2026-04-19'),
-    linkTo: '/admin/clients',
-  },
-  {
-    id: 'notif3',
-    type: 'follow_up',
-    title: 'Follow-up Due',
-    message: 'Follow-up with Ethio Telecom is due on May 10, 2026.',
-    read: false,
-    createdAt: new Date('2026-04-18'),
-    linkTo: '/admin/clients',
-  },
-  {
-    id: 'notif4',
-    type: 'leave_request',
-    title: 'Leave Request Pending',
-    message: 'Selam Worku has submitted a leave request for Apr 22–24.',
-    read: false,
-    createdAt: new Date('2026-04-21'),
-    linkTo: '/admin/guards',
-  },
-  {
-    id: 'notif5',
-    type: 'absent_guard',
-    title: 'Guard Absent Today',
-    message: 'Selam Worku (BASE-004) is marked absent today.',
-    read: true,
-    createdAt: new Date('2026-04-21'),
-    linkTo: '/admin/attendance',
-  },
-];
+function parseClient(c: any): Client {
+  return {
+    ...keysToCamel(c),
+    contractStart: c.contract_start ? new Date(c.contract_start) : new Date(),
+    contractEnd: c.contract_end ? new Date(c.contract_end) : undefined,
+    lastContactDate: c.last_contact_date ? new Date(c.last_contact_date) : undefined,
+    nextFollowUp: c.next_follow_up ? new Date(c.next_follow_up) : undefined,
+    assignedGuards: c.guards ? c.guards.map((g: any) => String(g.id)) : [],
+    notes: (c.notes || []).map((n: any) => ({ ...keysToCamel(n), createdAt: new Date(n.created_at || n.createdAt) })),
+    feedback: (c.feedback || []).map((f: any) => ({ ...keysToCamel(f), submittedAt: new Date(f.submitted_at || f.created_at || f.submittedAt) })),
+  };
+}
 
 export const useAppStore = create<AppStore>((set) => ({
-  // Service Requests
-  serviceRequests: mockServiceRequests,
-  addServiceRequest: (request) =>
+  serviceRequests: [],
+  clients: [],
+  guards: [],
+  attendance: [],
+  leaveRequests: [],
+  deployments: [],
+  trainingPrograms: [],
+  trainees: [],
+  notifications: [],
+
+  addServiceRequest: async (request) => {
+    const res = await fetchJson('/api/service-requests', {
+      method: 'POST',
+      body: JSON.stringify(keysToSnake(request)),
+    });
     set((state) => ({
-      serviceRequests: [
-        ...state.serviceRequests,
-        { ...request, id: `req-${Date.now()}`, submittedAt: new Date() },
-      ],
-      notifications: [
-        ...state.notifications,
-        {
-          id: `notif-${Date.now()}`,
-          type: 'pending_request' as const,
-          title: 'New Service Request',
-          message: `${request.name} submitted a new service request for ${request.serviceType}.`,
-          read: false,
-          createdAt: new Date(),
-          linkTo: '/admin',
-        },
-      ],
-    })),
-  updateServiceRequestStatus: (id, status) =>
+      serviceRequests: [...state.serviceRequests, { ...keysToCamel(res), submittedAt: new Date(res.submitted_at || res.created_at) }],
+    }));
+  },
+
+  updateServiceRequestStatus: async (id, status) => {
+    const res = await fetchJson(`/api/service-requests/${id}/status`, {
+      method: 'PATCH',
+      body: JSON.stringify({ status }),
+    });
     set((state) => ({
       serviceRequests: state.serviceRequests.map((req) =>
-        req.id === id ? { ...req, status } : req
+        req.id === String(id) ? { ...req, status: res.status } : req
       ),
-    })),
-  convertRequestToClient: (requestId) =>
-    set((state) => {
-      const request = state.serviceRequests.find((r) => r.id === requestId);
-      if (!request) return state;
-      const newClient: Client = {
-        id: `c-${Date.now()}`,
-        name: request.name,
-        email: request.email,
-        phone: request.phone,
-        company: request.name,
-        serviceType: request.serviceType,
-        location: request.location,
-        contractStart: new Date(),
-        status: 'active',
-        assignedGuards: [],
-        notes: [],
-        feedback: [],
-      };
-      return {
-        serviceRequests: state.serviceRequests.map((req) =>
-          req.id === requestId ? { ...req, status: 'converted' as const } : req
-        ),
-        clients: [...state.clients, newClient],
-      };
-    }),
+    }));
+  },
 
-  // Clients
-  clients: mockClients,
-  addClient: (client) =>
+  convertRequestToClient: async (requestId) => {
+    const res = await fetchJson(`/api/service-requests/${requestId}/convert`, {
+      method: 'POST',
+    });
+    // The response is the new client object
+    const newClient = parseClient(res);
     set((state) => ({
-      clients: [...state.clients, { ...client, id: `c-${Date.now()}` }],
-    })),
-  updateClient: (id, updates) =>
-    set((state) => ({
-      clients: state.clients.map((client) =>
-        client.id === id ? { ...client, ...updates } : client
+      serviceRequests: state.serviceRequests.map((req) =>
+        req.id === String(requestId) ? { ...req, status: 'converted' } : req
       ),
-    })),
-  addClientNote: (clientId, text) =>
+      clients: [...state.clients, newClient],
+    }));
+  },
+
+  addClient: async (client) => {
+    const res = await fetchJson('/api/clients', {
+      method: 'POST',
+      body: JSON.stringify(keysToSnake(client)),
+    });
     set((state) => ({
-      clients: state.clients.map((client) =>
-        client.id === clientId
+      clients: [...state.clients, parseClient(res)],
+    }));
+  },
+
+  updateClient: async (id, updates) => {
+    const res = await fetchJson(`/api/clients/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(keysToSnake(updates)),
+    });
+    set((state) => ({
+      clients: state.clients.map((c) => (c.id === String(id) ? parseClient(res) : c)),
+    }));
+  },
+
+  addClientNote: async (clientId, text) => {
+    const res = await fetchJson(`/api/clients/${clientId}/notes`, {
+      method: 'POST',
+      body: JSON.stringify({ text }),
+    });
+    set((state) => ({
+      clients: state.clients.map((c) =>
+        c.id === String(clientId)
           ? {
-              ...client,
-              notes: [
-                ...client.notes,
-                { id: `note-${Date.now()}`, text, createdAt: new Date() },
-              ],
+              ...c,
+              notes: [...c.notes, { ...keysToCamel(res), createdAt: new Date(res.created_at || res.createdAt) }],
             }
-          : client
+          : c
       ),
-    })),
-  addClientFeedback: (clientId, feedback) =>
+    }));
+  },
+
+  addClientFeedback: async (clientId, feedback) => {
+    const res = await fetchJson(`/api/clients/${clientId}/feedback`, {
+      method: 'POST',
+      body: JSON.stringify(keysToSnake(feedback)),
+    });
     set((state) => ({
-      clients: state.clients.map((client) =>
-        client.id === clientId
+      clients: state.clients.map((c) =>
+        c.id === String(clientId)
           ? {
-              ...client,
-              feedback: [
-                ...client.feedback,
-                { ...feedback, id: `fb-${Date.now()}`, submittedAt: new Date() },
-              ],
+              ...c,
+              feedback: [...c.feedback, { ...keysToCamel(res), submittedAt: new Date(res.submitted_at || res.created_at || res.submittedAt) }],
             }
-          : client
+          : c
       ),
-    })),
+    }));
+  },
 
-  // Guards
-  guards: mockGuards,
-  addGuard: (guard) =>
+  addGuard: async (guard) => {
+    const res = await fetchJson('/api/guards', {
+      method: 'POST',
+      body: JSON.stringify(keysToSnake(guard)),
+    });
     set((state) => ({
-      guards: [...state.guards, { ...guard, id: `g-${Date.now()}` }],
-    })),
-  updateGuard: (id, updates) =>
-    set((state) => ({
-      guards: state.guards.map((guard) =>
-        guard.id === id ? { ...guard, ...updates } : guard
-      ),
-    })),
+      guards: [...state.guards, keysToCamel(res)],
+    }));
+  },
 
-  // Attendance
-  attendance: mockAttendance,
-  addAttendance: (record) =>
+  updateGuard: async (id, updates) => {
+    const res = await fetchJson(`/api/guards/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(keysToSnake(updates)),
+    });
     set((state) => ({
-      attendance: [...state.attendance, { ...record, id: `a-${Date.now()}` }],
-    })),
-  updateAttendance: (id, updates) =>
+      guards: state.guards.map((g) => (g.id === String(id) ? keysToCamel(res) : g)),
+    }));
+  },
+
+  addAttendance: async (record) => {
+    const res = await fetchJson('/api/attendance', {
+      method: 'POST',
+      body: JSON.stringify(keysToSnake(record)),
+    });
+    set((state) => ({
+      attendance: [...state.attendance, { ...keysToCamel(res), date: new Date(res.date) }],
+    }));
+  },
+
+  updateAttendance: async (id, updates) => {
+    const res = await fetchJson(`/api/attendance/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(keysToSnake(updates)),
+    });
     set((state) => ({
       attendance: state.attendance.map((rec) =>
-        rec.id === id ? { ...rec, ...updates } : rec
+        rec.id === String(id) ? { ...keysToCamel(res), date: new Date(res.date) } : rec
       ),
-    })),
+    }));
+  },
 
-  // Leave Requests
-  leaveRequests: mockLeaveRequests,
-  addLeaveRequest: (request) =>
+  addLeaveRequest: async (request) => {
+    const res = await fetchJson('/api/leave-requests', {
+      method: 'POST',
+      body: JSON.stringify(keysToSnake(request)),
+    });
     set((state) => ({
       leaveRequests: [
         ...state.leaveRequests,
-        { ...request, id: `l-${Date.now()}`, submittedAt: new Date() },
-      ],
-      notifications: [
-        ...state.notifications,
         {
-          id: `notif-${Date.now()}`,
-          type: 'leave_request' as const,
-          title: 'New Leave Request',
-          message: `A guard has submitted a leave request.`,
-          read: false,
-          createdAt: new Date(),
-          linkTo: '/admin/guards',
+          ...keysToCamel(res),
+          startDate: new Date(res.start_date),
+          endDate: new Date(res.end_date),
+          submittedAt: new Date(res.submitted_at || res.created_at),
         },
       ],
-    })),
-  updateLeaveRequest: (id, status) =>
+    }));
+  },
+
+  updateLeaveRequest: async (id, status) => {
+    const res = await fetchJson(`/api/leave-requests/${id}/status`, {
+      method: 'PATCH',
+      body: JSON.stringify({ status }),
+    });
     set((state) => ({
       leaveRequests: state.leaveRequests.map((req) =>
-        req.id === id ? { ...req, status } : req
+        req.id === String(id) ? { ...req, status: res.status } : req
       ),
-    })),
+    }));
+  },
 
-  // Deployments
-  deployments: mockDeployments,
-  addDeployment: (deployment) =>
+  addDeployment: async (deployment) => {
+    const res = await fetchJson('/api/deployments', {
+      method: 'POST',
+      body: JSON.stringify(keysToSnake(deployment)),
+    });
     set((state) => ({
-      deployments: [...state.deployments, { ...deployment, id: `d-${Date.now()}` }],
-    })),
-  updateDeployment: (id, updates) =>
+      deployments: [
+        ...state.deployments,
+        {
+          ...keysToCamel(res),
+          startDate: new Date(res.start_date),
+          endDate: new Date(res.end_date),
+        },
+      ],
+    }));
+  },
+
+  updateDeployment: async (id, updates) => {
+    const res = await fetchJson(`/api/deployments/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(keysToSnake(updates)),
+    });
     set((state) => ({
       deployments: state.deployments.map((dep) =>
-        dep.id === id ? { ...dep, ...updates } : dep
+        dep.id === String(id)
+          ? {
+              ...keysToCamel(res),
+              startDate: new Date(res.start_date),
+              endDate: new Date(res.end_date),
+            }
+          : dep
       ),
-    })),
+    }));
+  },
 
-  // Training Programs
-  trainingPrograms: mockTrainingPrograms,
-  addTrainingProgram: (program) =>
+  addTrainingProgram: async (program) => {
+    const res = await fetchJson('/api/training-programs', {
+      method: 'POST',
+      body: JSON.stringify(keysToSnake(program)),
+    });
     set((state) => ({
-      trainingPrograms: [...state.trainingPrograms, { ...program, id: `t-${Date.now()}` }],
-    })),
+      trainingPrograms: [
+        ...state.trainingPrograms,
+        {
+          ...keysToCamel(res),
+          nextStartDate: res.next_start_date ? new Date(res.next_start_date) : new Date(),
+        },
+      ],
+    }));
+  },
 
-  // Trainees
-  trainees: mockTrainees,
-  addTrainee: (trainee) =>
+  addTrainee: async (trainee) => {
+    const res = await fetchJson('/api/trainees', {
+      method: 'POST',
+      body: JSON.stringify(keysToSnake(trainee)),
+    });
     set((state) => ({
-      trainees: [...state.trainees, { ...trainee, id: `tr-${Date.now()}` }],
-    })),
-  updateTraineeProgress: (id, progress) =>
+      trainees: [
+        ...state.trainees,
+        {
+          ...keysToCamel(res),
+          enrolledDate: new Date(res.enrolled_date || res.created_at),
+        },
+      ],
+    }));
+  },
+
+  updateTraineeProgress: async (id, progress) => {
+    const res = await fetchJson(`/api/trainees/${id}/progress`, {
+      method: 'PATCH',
+      body: JSON.stringify({ progress }),
+    });
     set((state) => ({
-      trainees: state.trainees.map((trainee) =>
-        trainee.id === id ? { ...trainee, progress } : trainee
+      trainees: state.trainees.map((t) =>
+        t.id === String(id) ? { ...t, progress: res.progress } : t
       ),
-    })),
+    }));
+  },
 
-  // Notifications
-  notifications: mockNotifications,
-  markNotificationRead: (id) =>
+  markNotificationRead: async (id) => {
+    const res = await fetchJson(`/api/notifications/${id}/read`, {
+      method: 'PUT',
+    });
     set((state) => ({
       notifications: state.notifications.map((n) =>
-        n.id === id ? { ...n, read: true } : n
+        n.id === String(id) ? { ...keysToCamel(res), createdAt: new Date(res.created_at) } : n
       ),
-    })),
-  markAllNotificationsRead: () =>
+    }));
+  },
+
+  markAllNotificationsRead: async () => {
+    await fetchJson('/api/notifications/mark-all-read', {
+      method: 'POST',
+    });
     set((state) => ({
       notifications: state.notifications.map((n) => ({ ...n, read: true })),
-    })),
-  addNotification: (notification) =>
+    }));
+  },
+
+  addNotification: async (notification) => {
+    const res = await fetchJson('/api/notifications', {
+      method: 'POST',
+      body: JSON.stringify(keysToSnake(notification)),
+    });
     set((state) => ({
       notifications: [
         ...state.notifications,
-        { ...notification, id: `notif-${Date.now()}`, createdAt: new Date() },
+        { ...keysToCamel(res), createdAt: new Date(res.created_at) },
       ],
-    })),
+    }));
+  },
+
+  fetchAppData: async () => {
+    try {
+      const [
+        serviceRequests,
+        clients,
+        guards,
+        attendance,
+        leaveRequests,
+        deployments,
+        trainingPrograms,
+        trainees,
+        notifications,
+      ] = await Promise.all([
+        fetchJson('/api/service-requests').catch(() => []),
+        fetchJson('/api/clients').catch(() => []),
+        fetchJson('/api/guards').catch(() => []),
+        fetchJson('/api/attendance').catch(() => []),
+        fetchJson('/api/leave-requests').catch(() => []),
+        fetchJson('/api/deployments').catch(() => []),
+        fetchJson('/api/training-programs').catch(() => []),
+        fetchJson('/api/trainees').catch(() => []),
+        fetchJson('/api/notifications').catch(() => []),
+      ]);
+
+      set({
+        serviceRequests: (serviceRequests || []).map((req: any) => ({
+          ...keysToCamel(req),
+          id: String(req.id),
+          submittedAt: new Date(req.submitted_at || req.created_at),
+        })),
+        clients: (clients || []).map(parseClient).map((c: Client) => ({ ...c, id: String(c.id) })),
+        guards: (guards || []).map((g: any) => ({
+          ...keysToCamel(g),
+          id: String(g.id),
+          certifications: Array.isArray(g.certifications)
+            ? g.certifications
+            : typeof g.certifications === 'string'
+            ? JSON.parse(g.certifications)
+            : [],
+        })),
+        attendance: (attendance || []).map((a: any) => ({
+          ...keysToCamel(a),
+          id: String(a.id),
+          guardId: String(a.guard_id),
+          date: new Date(a.date),
+        })),
+        leaveRequests: (leaveRequests || []).map((l: any) => ({
+          ...keysToCamel(l),
+          id: String(l.id),
+          guardId: String(l.guard_id),
+          startDate: new Date(l.start_date),
+          endDate: new Date(l.end_date),
+          submittedAt: new Date(l.submitted_at || l.created_at),
+        })),
+        deployments: (deployments || []).map((d: any) => ({
+          ...keysToCamel(d),
+          id: String(d.id),
+          guardId: String(d.guard_id),
+          clientId: String(d.client_id),
+          startDate: new Date(d.start_date),
+          endDate: new Date(d.end_date),
+        })),
+        trainingPrograms: (trainingPrograms || []).map((t: any) => ({
+          ...keysToCamel(t),
+          id: String(t.id),
+          nextStartDate: t.next_start_date ? new Date(t.next_start_date) : new Date(),
+        })),
+        trainees: (trainees || []).map((tr: any) => ({
+          ...keysToCamel(tr),
+          id: String(tr.id),
+          programId: String(tr.program_id),
+          enrolledDate: new Date(tr.enrolled_date || tr.created_at),
+        })),
+        notifications: (notifications || []).map((n: any) => ({
+          ...keysToCamel(n),
+          id: String(n.id),
+          createdAt: new Date(n.created_at),
+        })),
+      });
+    } catch (error) {
+      console.error('Failed to fetch App Data:', error);
+    }
+  },
 }));

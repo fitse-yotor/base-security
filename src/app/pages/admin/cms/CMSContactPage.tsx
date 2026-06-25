@@ -10,7 +10,13 @@ import { toast } from 'sonner';
 
 export default function CMSContactPage() {
   const { contactInfo, updateContactInfo, companyInfo, updateCompanyInfo } = useCMSStore();
-  const [data, setData] = useState({ ...contactInfo, address: [...contactInfo.address], phone: [...contactInfo.phone], email: [...contactInfo.email], hours: [...contactInfo.hours] });
+  const [data, setData] = useState({
+    ...contactInfo,
+    address: contactInfo?.address ? [...contactInfo.address] : [],
+    phone: contactInfo?.phone ? [...contactInfo.phone] : [],
+    email: contactInfo?.email ? [...contactInfo.email] : [],
+    hours: contactInfo?.hours ? [...contactInfo.hours] : []
+  });
   const [company, setCompany] = useState({ ...companyInfo });
 
   const save = () => { updateContactInfo(data); updateCompanyInfo(company); toast.success('Contact info saved!'); };

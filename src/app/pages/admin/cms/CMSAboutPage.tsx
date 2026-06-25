@@ -13,7 +13,7 @@ import type { TeamMember } from '../../../lib/cms-store';
 
 export default function CMSAboutPage() {
   const { aboutContent, updateAboutContent, teamMembers, addTeamMember, updateTeamMember, deleteTeamMember } = useCMSStore();
-  const [story, setStory] = useState([...aboutContent.story]);
+  const [story, setStory] = useState<Array<string>>(aboutContent.story ? [...aboutContent.story] : []);
   const [mission, setMission] = useState(aboutContent.mission);
   const [vision, setVision] = useState(aboutContent.vision);
   const [editMember, setEditMember] = useState<TeamMember | null>(null);

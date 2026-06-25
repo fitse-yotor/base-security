@@ -4,6 +4,8 @@ import { Button } from '../components/ui/button';
 import { BaseLogo } from '../components/BaseLogo';
 import { WhatsAppButton } from '../components/WhatsAppButton';
 import { useState, useEffect } from 'react';
+import { useCMSStore } from '../lib/cms-store';
+import { useAppStore } from '../lib/store';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -17,6 +19,14 @@ export default function Root() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
   const isAdminRoute = location.pathname.startsWith('/admin');
+
+  const fetchCMSData = useCMSStore((state) => state.fetchCMSData);
+  const fetchAppData = useAppStore((state) => state.fetchAppData);
+
+  useEffect(() => {
+    fetchCMSData();
+    fetchAppData();
+  }, [fetchCMSData, fetchAppData]);
 
   if (isAdminRoute) {
     return (

@@ -1,4 +1,5 @@
-﻿import { create } from "zustand";
+import { create } from "zustand";
+
 export interface HeroContent { badge: string; title: string; highlightWord: string; subtitle: string; primaryBtn: string; secondaryBtn: string; bgImage: string; }
 export interface StatItem { id: string; value: number; suffix: string; label: string; }
 export interface Testimonial { id: string; name: string; company: string; role: string; content: string; rating: number; }
@@ -17,23 +18,24 @@ export interface ContactInfo { address: string[]; phone: string[]; email: string
 export interface CompanyInfo { name: string; taglineAmharic: string; taglineEnglish: string; whatsappNumber: string; }
 
 interface CMSStore {
-  companyInfo: CompanyInfo; updateCompanyInfo: (u: Partial<CompanyInfo>) => void;
-  heroContent: HeroContent; updateHeroContent: (u: Partial<HeroContent>) => void;
-  stats: StatItem[]; addStat: (s: Omit<StatItem,"id">) => void; updateStat: (id: string, u: Partial<StatItem>) => void; deleteStat: (id: string) => void;
-  testimonials: Testimonial[]; addTestimonial: (t: Omit<Testimonial,"id">) => void; updateTestimonial: (id: string, u: Partial<Testimonial>) => void; deleteTestimonial: (id: string) => void;
-  clientLogos: ClientLogo[]; addClientLogo: (c: Omit<ClientLogo,"id">) => void; updateClientLogo: (id: string, u: Partial<ClientLogo>) => void; deleteClientLogo: (id: string) => void;
-  serviceCards: ServiceCard[]; addServiceCard: (s: Omit<ServiceCard,"id">) => void; updateServiceCard: (id: string, u: Partial<ServiceCard>) => void; deleteServiceCard: (id: string) => void;
-  teamMembers: TeamMember[]; addTeamMember: (m: Omit<TeamMember,"id">) => void; updateTeamMember: (id: string, u: Partial<TeamMember>) => void; deleteTeamMember: (id: string) => void;
-  aboutContent: AboutContent; updateAboutContent: (u: Partial<AboutContent>) => void;
-  privateSecurityPage: ServicePageContent; updatePrivateSecurityPage: (u: Partial<ServicePageContent>) => void;
-  officeBuildingPage: ServicePageContent; updateOfficeBuildingPage: (u: Partial<ServicePageContent>) => void;
-  housekeepingPage: ServicePageContent; updateHousekeepingPage: (u: Partial<ServicePageContent>) => void;
-  trainingCourses: TrainingCourse[]; addTrainingCourse: (c: Omit<TrainingCourse,"id">) => void; updateTrainingCourse: (id: string, u: Partial<TrainingCourse>) => void; deleteTrainingCourse: (id: string) => void;
-  galleryPhotos: GalleryPhoto[]; addGalleryPhoto: (p: Omit<GalleryPhoto,"id">) => void; updateGalleryPhoto: (id: string, u: Partial<GalleryPhoto>) => void; deleteGalleryPhoto: (id: string) => void;
-  blogPosts: BlogPost[]; addBlogPost: (p: Omit<BlogPost,"id">) => void; updateBlogPost: (id: string, u: Partial<BlogPost>) => void; deleteBlogPost: (id: string) => void;
-  faqItems: FAQItem[]; addFAQItem: (f: Omit<FAQItem,"id">) => void; updateFAQItem: (id: string, u: Partial<FAQItem>) => void; deleteFAQItem: (id: string) => void;
-  jobPostings: JobPosting[]; addJobPosting: (j: Omit<JobPosting,"id">) => void; updateJobPosting: (id: string, u: Partial<JobPosting>) => void; deleteJobPosting: (id: string) => void;
-  contactInfo: ContactInfo; updateContactInfo: (u: Partial<ContactInfo>) => void;
+  companyInfo: CompanyInfo; updateCompanyInfo: (u: Partial<CompanyInfo>) => Promise<void>;
+  heroContent: HeroContent; updateHeroContent: (u: Partial<HeroContent>) => Promise<void>;
+  stats: StatItem[]; addStat: (s: Omit<StatItem,"id">) => Promise<void>; updateStat: (id: string, u: Partial<StatItem>) => Promise<void>; deleteStat: (id: string) => Promise<void>;
+  testimonials: Testimonial[]; addTestimonial: (t: Omit<Testimonial,"id">) => Promise<void>; updateTestimonial: (id: string, u: Partial<Testimonial>) => Promise<void>; deleteTestimonial: (id: string) => Promise<void>;
+  clientLogos: ClientLogo[]; addClientLogo: (c: Omit<ClientLogo,"id">) => Promise<void>; updateClientLogo: (id: string, u: Partial<ClientLogo>) => Promise<void>; deleteClientLogo: (id: string) => Promise<void>;
+  serviceCards: ServiceCard[]; addServiceCard: (s: Omit<ServiceCard,"id">) => Promise<void>; updateServiceCard: (id: string, u: Partial<ServiceCard>) => Promise<void>; deleteServiceCard: (id: string) => Promise<void>;
+  teamMembers: TeamMember[]; addTeamMember: (m: Omit<TeamMember,"id">) => Promise<void>; updateTeamMember: (id: string, u: Partial<TeamMember>) => Promise<void>; deleteTeamMember: (id: string) => Promise<void>;
+  aboutContent: AboutContent; updateAboutContent: (u: Partial<AboutContent>) => Promise<void>;
+  privateSecurityPage: ServicePageContent; updatePrivateSecurityPage: (u: Partial<ServicePageContent>) => Promise<void>;
+  officeBuildingPage: ServicePageContent; updateOfficeBuildingPage: (u: Partial<ServicePageContent>) => Promise<void>;
+  housekeepingPage: ServicePageContent; updateHousekeepingPage: (u: Partial<ServicePageContent>) => Promise<void>;
+  trainingCourses: TrainingCourse[]; addTrainingCourse: (c: Omit<TrainingCourse,"id">) => Promise<void>; updateTrainingCourse: (id: string, u: Partial<TrainingCourse>) => Promise<void>; deleteTrainingCourse: (id: string) => Promise<void>;
+  galleryPhotos: GalleryPhoto[]; addGalleryPhoto: (p: Omit<GalleryPhoto,"id">) => Promise<void>; updateGalleryPhoto: (id: string, u: Partial<GalleryPhoto>) => Promise<void>; deleteGalleryPhoto: (id: string) => Promise<void>;
+  blogPosts: BlogPost[]; addBlogPost: (p: Omit<BlogPost,"id">) => Promise<void>; updateBlogPost: (id: string, u: Partial<BlogPost>) => Promise<void>; deleteBlogPost: (id: string) => Promise<void>;
+  faqItems: FAQItem[]; addFAQItem: (f: Omit<FAQItem,"id">) => Promise<void>; updateFAQItem: (id: string, u: Partial<FAQItem>) => Promise<void>; deleteFAQItem: (id: string) => Promise<void>;
+  jobPostings: JobPosting[]; addJobPosting: (j: Omit<JobPosting,"id">) => Promise<void>; updateJobPosting: (id: string, u: Partial<JobPosting>) => Promise<void>; deleteJobPosting: (id: string) => Promise<void>;
+  contactInfo: ContactInfo; updateContactInfo: (u: Partial<ContactInfo>) => Promise<void>;
+  fetchCMSData: () => Promise<void>;
 }
 
 const initialCompanyInfo: CompanyInfo = { name: 'BASE SECURITY, CLEANING & TRADING PLC', taglineAmharic: 'ቤዝ ለላቀ የደህንነት አገልግሎት', taglineEnglish: 'Base Excellence Security Service', whatsappNumber: '251911234038' };
@@ -58,77 +60,386 @@ const initialFAQ: FAQItem[] = [{id:'f1',category:'General',question:'What servic
 const initialJobs: JobPosting[] = [{id:'j1',title:'Security Guard',department:'Security',type:'Full-time',location:'Addis Abeba (Multiple Sites)',description:'Join our professional security team and protect our clients\' premises across Addis Abeba.',requirements:['18+ years old','High school diploma','Clean background check','Physical fitness'],benefits:['Competitive ETB salary','Uniform provided','Free training & certification','Career advancement'],active:true},{id:'j2',title:'VIP Protection Specialist',department:'Security',type:'Full-time',location:'Addis Abeba',description:'Provide elite protection services for high-profile executives and VIP clients.',requirements:['3+ years security experience','Advanced security certification','Driving license'],benefits:['Premium ETB salary','Vehicle allowance','Performance bonuses'],active:true},{id:'j3',title:'Cleaning Specialist',department:'Cleaning',type:'Full-time / Part-time',location:'Addis Abeba (Multiple Sites)',description:'Deliver professional cleaning and housekeeping services to our corporate and hospitality clients.',requirements:['Previous cleaning experience preferred','Attention to detail','Reliable and punctual'],benefits:['Competitive ETB salary','Flexible shifts','Training provided'],active:true},{id:'j4',title:'Security Supervisor',department:'Security',type:'Full-time',location:'Addis Abeba',description:'Lead and supervise a team of security guards across multiple client sites.',requirements:['5+ years security experience','Leadership skills','Advanced certification'],benefits:['Senior ETB salary','Management training','Company vehicle'],active:true}];
 const initialContact: ContactInfo = { address: ['Megenagna City Square Mall','10th Floor, Addis Abeba, Ethiopia'], phone: ['+251 91 123 4038'], email: ['basesc4@gmail.com'], hours: ['Mon-Fri: 8:00 AM - 6:00 PM','Sat: 9:00 AM - 3:00 PM'], mapEmbedUrl: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3940.5!2d38.7578!3d9.0192!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x164b85cef5ab402d%3A0x8467b6b037a24d49!2sMegenagna%2C%20Addis%20Ababa%2C%20Ethiopia!5e0!3m2!1sen!2s!4v1650000000000!5m2!1sen!2s' };
 
-const uid = () => `cms-${Date.now()}-${Math.random().toString(36).slice(2,7)}`;
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+
+function toCamel(s: string): string {
+  return s.replace(/([-_][a-z])/g, ($1) => $1.toUpperCase().replace('-', '').replace('_', ''));
+}
+
+function toSnake(s: string): string {
+  return s.replace(/[A-Z]/g, (letter) => `_${letter.toLowerCase()}`);
+}
+
+export function keysToCamel(obj: any): any {
+  if (Array.isArray(obj)) {
+    return obj.map((v) => keysToCamel(v));
+  } else if (obj !== null && obj !== undefined && obj.constructor === Object) {
+    return Object.keys(obj).reduce(
+      (result, key) => ({
+        ...result,
+        [toCamel(key)]: keysToCamel(obj[key]),
+      }),
+      {}
+    );
+  }
+  return obj;
+}
+
+export function keysToSnake(obj: any): any {
+  if (Array.isArray(obj)) {
+    return obj.map((v) => keysToSnake(v));
+  } else if (obj !== null && obj !== undefined && obj.constructor === Object) {
+    return Object.keys(obj).reduce(
+      (result, key) => ({
+        ...result,
+        [toSnake(key)]: keysToSnake(obj[key]),
+      }),
+      {}
+    );
+  }
+  return obj;
+}
+
+async function fetchJson(path: string, options?: RequestInit) {
+  const res = await fetch(`${API_URL}${path}`, {
+    ...options,
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      ...options?.headers,
+    },
+  });
+  if (!res.ok) {
+    throw new Error(`HTTP error! status: ${res.status}`);
+  }
+  if (res.status === 204) return null;
+  return res.json();
+}
 
 export const useCMSStore = create<CMSStore>((set) => ({
   companyInfo: initialCompanyInfo,
-  updateCompanyInfo: (u) => set((s) => ({ companyInfo: { ...s.companyInfo, ...u } })),
+  updateCompanyInfo: async (u) => {
+    const res = await fetchJson('/api/cms/settings/company-info', {
+      method: 'PUT',
+      body: JSON.stringify(keysToSnake(u)),
+    });
+    set((s) => ({ companyInfo: { ...s.companyInfo, ...keysToCamel(res) } }));
+  },
 
   heroContent: initialHero,
-  updateHeroContent: (u) => set((s) => ({ heroContent: { ...s.heroContent, ...u } })),
+  updateHeroContent: async (u) => {
+    const res = await fetchJson('/api/cms/settings/hero', {
+      method: 'PUT',
+      body: JSON.stringify(keysToSnake(u)),
+    });
+    set((s) => ({ heroContent: { ...s.heroContent, ...keysToCamel(res) } }));
+  },
 
   stats: initialStats,
-  addStat: (item) => set((s) => ({ stats: [...s.stats, { ...item, id: uid() }] })),
-  updateStat: (id, u) => set((s) => ({ stats: s.stats.map((x) => x.id === id ? { ...x, ...u } : x) })),
-  deleteStat: (id) => set((s) => ({ stats: s.stats.filter((x) => x.id !== id) })),
+  addStat: async (item) => {
+    const res = await fetchJson('/api/cms/stats', {
+      method: 'POST',
+      body: JSON.stringify(keysToSnake(item)),
+    });
+    set((s) => ({ stats: [...s.stats, keysToCamel(res)] }));
+  },
+  updateStat: async (id, u) => {
+    const res = await fetchJson(`/api/cms/stats/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(keysToSnake(u)),
+    });
+    set((s) => ({ stats: s.stats.map((x) => x.id === id ? { ...x, ...keysToCamel(res) } : x) }));
+  },
+  deleteStat: async (id) => {
+    await fetchJson(`/api/cms/stats/${id}`, { method: 'DELETE' });
+    set((s) => ({ stats: s.stats.filter((x) => x.id !== id) }));
+  },
 
   testimonials: initialTestimonials,
-  addTestimonial: (item) => set((s) => ({ testimonials: [...s.testimonials, { ...item, id: uid() }] })),
-  updateTestimonial: (id, u) => set((s) => ({ testimonials: s.testimonials.map((x) => x.id === id ? { ...x, ...u } : x) })),
-  deleteTestimonial: (id) => set((s) => ({ testimonials: s.testimonials.filter((x) => x.id !== id) })),
+  addTestimonial: async (item) => {
+    const res = await fetchJson('/api/cms/testimonials', {
+      method: 'POST',
+      body: JSON.stringify(keysToSnake(item)),
+    });
+    set((s) => ({ testimonials: [...s.testimonials, keysToCamel(res)] }));
+  },
+  updateTestimonial: async (id, u) => {
+    const res = await fetchJson(`/api/cms/testimonials/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(keysToSnake(u)),
+    });
+    set((s) => ({ testimonials: s.testimonials.map((x) => x.id === id ? { ...x, ...keysToCamel(res) } : x) }));
+  },
+  deleteTestimonial: async (id) => {
+    await fetchJson(`/api/cms/testimonials/${id}`, { method: 'DELETE' });
+    set((s) => ({ testimonials: s.testimonials.filter((x) => x.id !== id) }));
+  },
 
   clientLogos: initialClientLogos,
-  addClientLogo: (item) => set((s) => ({ clientLogos: [...s.clientLogos, { ...item, id: uid() }] })),
-  updateClientLogo: (id, u) => set((s) => ({ clientLogos: s.clientLogos.map((x) => x.id === id ? { ...x, ...u } : x) })),
-  deleteClientLogo: (id) => set((s) => ({ clientLogos: s.clientLogos.filter((x) => x.id !== id) })),
+  addClientLogo: async (item) => {
+    const res = await fetchJson('/api/cms/client-logos', {
+      method: 'POST',
+      body: JSON.stringify(keysToSnake(item)),
+    });
+    set((s) => ({ clientLogos: [...s.clientLogos, keysToCamel(res)] }));
+  },
+  updateClientLogo: async (id, u) => {
+    const res = await fetchJson(`/api/cms/client-logos/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(keysToSnake(u)),
+    });
+    set((s) => ({ clientLogos: s.clientLogos.map((x) => x.id === id ? { ...x, ...keysToCamel(res) } : x) }));
+  },
+  deleteClientLogo: async (id) => {
+    await fetchJson(`/api/cms/client-logos/${id}`, { method: 'DELETE' });
+    set((s) => ({ clientLogos: s.clientLogos.filter((x) => x.id !== id) }));
+  },
 
   serviceCards: initialServiceCards,
-  addServiceCard: (item) => set((s) => ({ serviceCards: [...s.serviceCards, { ...item, id: uid() }] })),
-  updateServiceCard: (id, u) => set((s) => ({ serviceCards: s.serviceCards.map((x) => x.id === id ? { ...x, ...u } : x) })),
-  deleteServiceCard: (id) => set((s) => ({ serviceCards: s.serviceCards.filter((x) => x.id !== id) })),
+  addServiceCard: async (item) => {
+    const res = await fetchJson('/api/cms/service-cards', {
+      method: 'POST',
+      body: JSON.stringify(keysToSnake(item)),
+    });
+    set((s) => ({ serviceCards: [...s.serviceCards, keysToCamel(res)] }));
+  },
+  updateServiceCard: async (id, u) => {
+    const res = await fetchJson(`/api/cms/service-cards/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(keysToSnake(u)),
+    });
+    set((s) => ({ serviceCards: s.serviceCards.map((x) => x.id === id ? { ...x, ...keysToCamel(res) } : x) }));
+  },
+  deleteServiceCard: async (id) => {
+    await fetchJson(`/api/cms/service-cards/${id}`, { method: 'DELETE' });
+    set((s) => ({ serviceCards: s.serviceCards.filter((x) => x.id !== id) }));
+  },
 
   teamMembers: initialTeamMembers,
-  addTeamMember: (item) => set((s) => ({ teamMembers: [...s.teamMembers, { ...item, id: uid() }] })),
-  updateTeamMember: (id, u) => set((s) => ({ teamMembers: s.teamMembers.map((x) => x.id === id ? { ...x, ...u } : x) })),
-  deleteTeamMember: (id) => set((s) => ({ teamMembers: s.teamMembers.filter((x) => x.id !== id) })),
+  addTeamMember: async (item) => {
+    const res = await fetchJson('/api/cms/team-members', {
+      method: 'POST',
+      body: JSON.stringify(keysToSnake(item)),
+    });
+    set((s) => ({ teamMembers: [...s.teamMembers, keysToCamel(res)] }));
+  },
+  updateTeamMember: async (id, u) => {
+    const res = await fetchJson(`/api/cms/team-members/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(keysToSnake(u)),
+    });
+    set((s) => ({ teamMembers: s.teamMembers.map((x) => x.id === id ? { ...x, ...keysToCamel(res) } : x) }));
+  },
+  deleteTeamMember: async (id) => {
+    await fetchJson(`/api/cms/team-members/${id}`, { method: 'DELETE' });
+    set((s) => ({ teamMembers: s.teamMembers.filter((x) => x.id !== id) }));
+  },
 
   aboutContent: initialAbout,
-  updateAboutContent: (u) => set((s) => ({ aboutContent: { ...s.aboutContent, ...u } })),
+  updateAboutContent: async (u) => {
+    const res = await fetchJson('/api/cms/settings/about', {
+      method: 'PUT',
+      body: JSON.stringify(keysToSnake(u)),
+    });
+    set((s) => ({ aboutContent: { ...s.aboutContent, ...keysToCamel(res) } }));
+  },
 
   privateSecurityPage: initialPrivateSecurity,
-  updatePrivateSecurityPage: (u) => set((s) => ({ privateSecurityPage: { ...s.privateSecurityPage, ...u } })),
+  updatePrivateSecurityPage: async (u) => {
+    const res = await fetchJson('/api/cms/service-pages/private-security', {
+      method: 'PUT',
+      body: JSON.stringify(keysToSnake(u)),
+    });
+    set((s) => ({ privateSecurityPage: { ...s.privateSecurityPage, ...keysToCamel(res) } }));
+  },
 
   officeBuildingPage: initialOfficeBuilding,
-  updateOfficeBuildingPage: (u) => set((s) => ({ officeBuildingPage: { ...s.officeBuildingPage, ...u } })),
+  updateOfficeBuildingPage: async (u) => {
+    const res = await fetchJson('/api/cms/service-pages/office-building', {
+      method: 'PUT',
+      body: JSON.stringify(keysToSnake(u)),
+    });
+    set((s) => ({ officeBuildingPage: { ...s.officeBuildingPage, ...keysToCamel(res) } }));
+  },
 
   housekeepingPage: initialHousekeeping,
-  updateHousekeepingPage: (u) => set((s) => ({ housekeepingPage: { ...s.housekeepingPage, ...u } })),
+  updateHousekeepingPage: async (u) => {
+    const res = await fetchJson('/api/cms/service-pages/housekeeping', {
+      method: 'PUT',
+      body: JSON.stringify(keysToSnake(u)),
+    });
+    set((s) => ({ housekeepingPage: { ...s.housekeepingPage, ...keysToCamel(res) } }));
+  },
 
   trainingCourses: initialTrainingCourses,
-  addTrainingCourse: (item) => set((s) => ({ trainingCourses: [...s.trainingCourses, { ...item, id: uid() }] })),
-  updateTrainingCourse: (id, u) => set((s) => ({ trainingCourses: s.trainingCourses.map((x) => x.id === id ? { ...x, ...u } : x) })),
-  deleteTrainingCourse: (id) => set((s) => ({ trainingCourses: s.trainingCourses.filter((x) => x.id !== id) })),
+  addTrainingCourse: async (item) => {
+    const res = await fetchJson('/api/cms/training-courses', {
+      method: 'POST',
+      body: JSON.stringify(keysToSnake(item)),
+    });
+    set((s) => ({ trainingCourses: [...s.trainingCourses, keysToCamel(res)] }));
+  },
+  updateTrainingCourse: async (id, u) => {
+    const res = await fetchJson(`/api/cms/training-courses/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(keysToSnake(u)),
+    });
+    set((s) => ({ trainingCourses: s.trainingCourses.map((x) => x.id === id ? { ...x, ...keysToCamel(res) } : x) }));
+  },
+  deleteTrainingCourse: async (id) => {
+    await fetchJson(`/api/cms/training-courses/${id}`, { method: 'DELETE' });
+    set((s) => ({ trainingCourses: s.trainingCourses.filter((x) => x.id !== id) }));
+  },
 
   galleryPhotos: initialGallery,
-  addGalleryPhoto: (item) => set((s) => ({ galleryPhotos: [...s.galleryPhotos, { ...item, id: uid() }] })),
-  updateGalleryPhoto: (id, u) => set((s) => ({ galleryPhotos: s.galleryPhotos.map((x) => x.id === id ? { ...x, ...u } : x) })),
-  deleteGalleryPhoto: (id) => set((s) => ({ galleryPhotos: s.galleryPhotos.filter((x) => x.id !== id) })),
+  addGalleryPhoto: async (item) => {
+    const res = await fetchJson('/api/cms/gallery-photos', {
+      method: 'POST',
+      body: JSON.stringify(keysToSnake(item)),
+    });
+    set((s) => ({ galleryPhotos: [...s.galleryPhotos, keysToCamel(res)] }));
+  },
+  updateGalleryPhoto: async (id, u) => {
+    const res = await fetchJson(`/api/cms/gallery-photos/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(keysToSnake(u)),
+    });
+    set((s) => ({ galleryPhotos: s.galleryPhotos.map((x) => x.id === id ? { ...x, ...keysToCamel(res) } : x) }));
+  },
+  deleteGalleryPhoto: async (id) => {
+    await fetchJson(`/api/cms/gallery-photos/${id}`, { method: 'DELETE' });
+    set((s) => ({ galleryPhotos: s.galleryPhotos.filter((x) => x.id !== id) }));
+  },
 
   blogPosts: initialBlogPosts,
-  addBlogPost: (item) => set((s) => ({ blogPosts: [...s.blogPosts, { ...item, id: uid() }] })),
-  updateBlogPost: (id, u) => set((s) => ({ blogPosts: s.blogPosts.map((x) => x.id === id ? { ...x, ...u } : x) })),
-  deleteBlogPost: (id) => set((s) => ({ blogPosts: s.blogPosts.filter((x) => x.id !== id) })),
+  addBlogPost: async (item) => {
+    const res = await fetchJson('/api/cms/blog-posts', {
+      method: 'POST',
+      body: JSON.stringify(keysToSnake(item)),
+    });
+    set((s) => ({ blogPosts: [...s.blogPosts, keysToCamel(res)] }));
+  },
+  updateBlogPost: async (id, u) => {
+    const res = await fetchJson(`/api/cms/blog-posts/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(keysToSnake(u)),
+    });
+    set((s) => ({ blogPosts: s.blogPosts.map((x) => x.id === id ? { ...x, ...keysToCamel(res) } : x) }));
+  },
+  deleteBlogPost: async (id) => {
+    await fetchJson(`/api/cms/blog-posts/${id}`, { method: 'DELETE' });
+    set((s) => ({ blogPosts: s.blogPosts.filter((x) => x.id !== id) }));
+  },
 
   faqItems: initialFAQ,
-  addFAQItem: (item) => set((s) => ({ faqItems: [...s.faqItems, { ...item, id: uid() }] })),
-  updateFAQItem: (id, u) => set((s) => ({ faqItems: s.faqItems.map((x) => x.id === id ? { ...x, ...u } : x) })),
-  deleteFAQItem: (id) => set((s) => ({ faqItems: s.faqItems.filter((x) => x.id !== id) })),
+  addFAQItem: async (item) => {
+    const res = await fetchJson('/api/cms/faq-items', {
+      method: 'POST',
+      body: JSON.stringify(keysToSnake(item)),
+    });
+    set((s) => ({ faqItems: [...s.faqItems, keysToCamel(res)] }));
+  },
+  updateFAQItem: async (id, u) => {
+    const res = await fetchJson(`/api/cms/faq-items/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(keysToSnake(u)),
+    });
+    set((s) => ({ faqItems: s.faqItems.map((x) => x.id === id ? { ...x, ...keysToCamel(res) } : x) }));
+  },
+  deleteFAQItem: async (id) => {
+    await fetchJson(`/api/cms/faq-items/${id}`, { method: 'DELETE' });
+    set((s) => ({ faqItems: s.faqItems.filter((x) => x.id !== id) }));
+  },
 
   jobPostings: initialJobs,
-  addJobPosting: (item) => set((s) => ({ jobPostings: [...s.jobPostings, { ...item, id: uid() }] })),
-  updateJobPosting: (id, u) => set((s) => ({ jobPostings: s.jobPostings.map((x) => x.id === id ? { ...x, ...u } : x) })),
-  deleteJobPosting: (id) => set((s) => ({ jobPostings: s.jobPostings.filter((x) => x.id !== id) })),
+  addJobPosting: async (item) => {
+    const res = await fetchJson('/api/cms/job-postings', {
+      method: 'POST',
+      body: JSON.stringify(keysToSnake(item)),
+    });
+    set((s) => ({ jobPostings: [...s.jobPostings, keysToCamel(res)] }));
+  },
+  updateJobPosting: async (id, u) => {
+    const res = await fetchJson(`/api/cms/job-postings/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(keysToSnake(u)),
+    });
+    set((s) => ({ jobPostings: s.jobPostings.map((x) => x.id === id ? { ...x, ...keysToCamel(res) } : x) }));
+  },
+  deleteJobPosting: async (id) => {
+    await fetchJson(`/api/cms/job-postings/${id}`, { method: 'DELETE' });
+    set((s) => ({ jobPostings: s.jobPostings.filter((x) => x.id !== id) }));
+  },
 
   contactInfo: initialContact,
-  updateContactInfo: (u) => set((s) => ({ contactInfo: { ...s.contactInfo, ...u } })),
+  updateContactInfo: async (u) => {
+    const res = await fetchJson('/api/cms/settings/contact', {
+      method: 'PUT',
+      body: JSON.stringify(keysToSnake(u)),
+    });
+    set((s) => ({ contactInfo: { ...s.contactInfo, ...keysToCamel(res) } }));
+  },
+
+  fetchCMSData: async () => {
+    const fetchSetting = async (key: string, defaultVal: any) => {
+      try {
+        const val = await fetchJson(`/api/cms/settings/${key}`);
+        return val ? keysToCamel(val) : defaultVal;
+      } catch {
+        return defaultVal;
+      }
+    };
+    const fetchServicePage = async (slug: string, defaultVal: any) => {
+      try {
+        const page = await fetchJson(`/api/cms/service-pages/${slug}`);
+        return page ? keysToCamel(page) : defaultVal;
+      } catch {
+        return defaultVal;
+      }
+    };
+
+    try {
+      const companyInfo = await fetchSetting('company-info', initialCompanyInfo);
+      const heroContent = await fetchSetting('hero', initialHero);
+      const aboutContent = await fetchSetting('about', initialAbout);
+      const contactInfo = await fetchSetting('contact', initialContact);
+
+      const privateSecurityPage = await fetchServicePage('private-security', initialPrivateSecurity);
+      const officeBuildingPage = await fetchServicePage('office-building', initialOfficeBuilding);
+      const housekeepingPage = await fetchServicePage('housekeeping', initialHousekeeping);
+
+      const stats = await fetchJson('/api/cms/stats').then(keysToCamel).catch(() => initialStats);
+      const testimonials = await fetchJson('/api/cms/testimonials').then(keysToCamel).catch(() => initialTestimonials);
+      const clientLogos = await fetchJson('/api/cms/client-logos').then(keysToCamel).catch(() => initialClientLogos);
+      const serviceCards = await fetchJson('/api/cms/service-cards').then(keysToCamel).catch(() => initialServiceCards);
+      const teamMembers = await fetchJson('/api/cms/team-members').then(keysToCamel).catch(() => initialTeamMembers);
+      const trainingCourses = await fetchJson('/api/cms/training-courses').then(keysToCamel).catch(() => initialTrainingCourses);
+      const galleryPhotos = await fetchJson('/api/cms/gallery-photos/all').then(keysToCamel).catch(() => initialGallery);
+      const blogPosts = await fetchJson('/api/cms/blog-posts/all').then(keysToCamel).catch(() => initialBlogPosts);
+      const faqItems = await fetchJson('/api/cms/faq-items/all').then(keysToCamel).catch(() => initialFAQ);
+      const jobPostings = await fetchJson('/api/cms/job-postings/all').then(keysToCamel).catch(() => initialJobs);
+
+      set({
+        companyInfo,
+        heroContent,
+        aboutContent,
+        contactInfo,
+        privateSecurityPage,
+        officeBuildingPage,
+        housekeepingPage,
+        stats: stats && stats.length ? stats : initialStats,
+        testimonials: testimonials && testimonials.length ? testimonials : initialTestimonials,
+        clientLogos: clientLogos && clientLogos.length ? clientLogos : initialClientLogos,
+        serviceCards: serviceCards && serviceCards.length ? serviceCards : initialServiceCards,
+        teamMembers: teamMembers && teamMembers.length ? teamMembers : initialTeamMembers,
+        trainingCourses: trainingCourses && trainingCourses.length ? trainingCourses : initialTrainingCourses,
+        galleryPhotos: galleryPhotos && galleryPhotos.length ? galleryPhotos : initialGallery,
+        blogPosts: blogPosts && blogPosts.length ? blogPosts : initialBlogPosts,
+        faqItems: faqItems && faqItems.length ? faqItems : initialFAQ,
+        jobPostings: jobPostings && jobPostings.length ? jobPostings : initialJobs,
+      });
+    } catch (e) {
+      console.error('Failed to load CMS data', e);
+    }
+  },
 }));
